@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import InputTemplate from './inputTemplate';
 import Player from './player';
-import "isomorphic-fetch"
+import "isomorphic-fetch";
+const axios = require('axios');
 
 class Main extends Component {
     constructor(props) {
@@ -15,29 +16,54 @@ class Main extends Component {
         // console.log(input);
         const url = 'https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app';
         let that = this;
-        fetch(url,
-            {
-                method: 'post',
-                body: JSON.stringify({ text: input, LanguageCode : lang})
-            })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                console.log(data.url);
-                that.setState({
-                    recentSpeech: data.url,
-                    responseList: [...that.state.responseList, { url: data.url, data: input }]
+
+        var data = JSON.stringify({ text: input, LanguageCode : lang});
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = false;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+    var _temp = JSON.parse(this.responseText)
+    that.setState({
+                    recentSpeech: _temp.url,
+                    responseList: [...that.state.responseList, { url: _temp.url, data: input }]
                 });
-               let newAudio =  new Audio(data.url);
+               let newAudio =  new Audio(_temp.url);
                newAudio.play();
-            })
-            .catch(function (error) {
-                that.setState({
-                    recentSpeech: ""
-                });
-                console.log('Request failed', error);
-            });
+  }
+});
+
+xhr.open("POST", "https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app");
+xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+
+xhr.send(data);
+
+
+        // axios(
+        //     { url : url,
+        //         method: 'post',
+        //         body: JSON.stringify({ text: input, LanguageCode : lang})
+        //     })
+        //     .then(function (response) {
+        //         return response.json();
+        //     })
+        //     .then(function (data) {
+        //         console.log(data.url);
+        //         that.setState({
+        //             recentSpeech: data.url,
+        //             responseList: [...that.state.responseList, { url: data.url, data: input }]
+        //         });
+        //        let newAudio =  new Audio(data.url);
+        //        newAudio.play();
+        //     })
+        //     .catch(function (error) {
+        //         that.setState({
+        //             recentSpeech: ""
+        //         });
+        //         console.log('Request failed', error);
+        //     });
     }
     play = (srcUrl) => {
         let x = document.getElementById("myAudio");
