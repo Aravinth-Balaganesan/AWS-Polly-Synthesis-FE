@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import InputTemplate from './inputTemplate';
 import Player from './player';
+import "isomorphic-fetch"
 
 class Main extends Component {
     constructor(props) {
