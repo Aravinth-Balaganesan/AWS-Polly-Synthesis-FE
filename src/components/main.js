@@ -194,12 +194,12 @@ class Main extends Component {
                     </tbody>
                 </table>}
 
-                <h1>AWS Translate Demo</h1>
+                {/* <h1>AWS Translate Demo</h1>
                 <div className="app">
                     <Translate submitMessage2={this.submitMessage2} />
 
                     {this.state.translatedResult !== '' && <div>{this.state.translatedResult}</div>}
-                </div>
+                </div> */}
             </div>
         );
     }
