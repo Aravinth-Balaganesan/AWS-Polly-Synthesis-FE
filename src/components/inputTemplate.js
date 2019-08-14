@@ -14,9 +14,9 @@ class InputTemplate extends Component {
     }
   }
 
-  submitMessage = (e) => {
+  submitMessage = (e, lang) => {
     e.preventDefault();
-    this.props.submitMessage(e, this.state.input);
+    this.props.submitMessage(e, this.state.input, lang);
     this.setState({ input: '' });
   }
 
@@ -27,8 +27,12 @@ class InputTemplate extends Component {
   }
 
   render() {
+    const sty = {
+      display: 'flex',
+      justifyContent: 'space-between'
+    }
     return (
-      <form onSubmit={e => this.submitMessage(e)}>
+      <form>
         <div className="input-single">
           <textarea rows="6"
             onKeyPress={this._handleKeyPress}
@@ -38,8 +42,11 @@ class InputTemplate extends Component {
           </textarea>
         </div>
         <br></br>
-        <button className="buttons" type="submit">Speak</button>
-      </form>
+        <div style={sty}>
+        <button className="buttons" onClick={e => this.submitMessage(e, 'es-ES')} type="button">Speak - Spanish, Mexican</button>
+        <button className="buttons" onClick={e => this.submitMessage(e, 'es-MX')} type="button">Speak - Spanish, Castilian</button>
+        </div>
+      </form >
     );
   }
 }

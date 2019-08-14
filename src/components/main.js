@@ -8,16 +8,16 @@ class Main extends Component {
         this.state = { recentSpeech: '', responseList: [] };
     }
 
-    submitMessage = (e, input) => {
+    submitMessage = (e, input, lang) => {
         e.preventDefault();
         if (input === '') return;
-        console.log(input);
+        // console.log(input);
         const url = 'https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app';
         let that = this;
         fetch(url,
             {
                 method: 'post',
-                body: JSON.stringify({ text: input })
+                body: JSON.stringify({ text: input, LanguageCode : lang})
             })
             .then(function (response) {
                 return response.json();
@@ -59,7 +59,7 @@ class Main extends Component {
                         {this.playAudio()}
                     </span> */}
                 
-                <h1>AWS Polly Synthesis</h1>
+                <h1>AWS Polly Synthesis Demo</h1>
                 {/* <p className="page-description">A tiny app that allows you to take notes by recording your voice</p>
         <p><a className="tz-link" href="htt`ps://tutorialzine.com/2017/08/converting-from-speech-to-text-with-javascript">Read the full article on Tutorialzine »</a></p>
         <h3 className="no-browser-support">Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This Demo In Google Chrome.</h3> */}
@@ -86,7 +86,7 @@ class Main extends Component {
                         {this.state.responseList.map((rl, i) => {
                             return <tr key={i}>
                                 <td>{rl.data}</td>
-                                <td><a href={rl.url}>Click to download</a><span><Player url={rl.url}play={false}/></span></td>
+                                <td><a className="tz-link" href={rl.url}>Download</a><br></br><span><Player url={rl.url}play={false}/></span></td>
                             </tr>
                         })}
                     </tbody>
