@@ -60,7 +60,7 @@ class InputTemplate extends Component {
             <option value="de-DE">German</option>
             <option value="hi-IN">Hindi</option>
           </select>
-          <button className="buttons" onClick={e => this.submitMessage(e)} type="button">Speak</button>
+          <button className="buttons" onClick={e => this.submitMessage(e)} type="button">Submit</button>
         </div>
       </form >
     );

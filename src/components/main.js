@@ -8,7 +8,7 @@ import Translate from "./translate";
 class Main extends Component {
     constructor(props) {
         super(props);
-        this.state = { recentSpeech: '', responseList: [], translatedResult : '' };
+        this.state = { recentSpeech: '', responseList: [], translatedResult: '' };
     }
 
     submitMessage = (e, input, lang) => {
@@ -33,7 +33,7 @@ class Main extends Component {
                     recentSpeech: _temp.url,
                     responseList: [...that.state.responseList, { url: _temp.url, data: input }]
                 });
-              
+
             }
         });
 
@@ -74,9 +74,9 @@ class Main extends Component {
         // console.log(input);
         let that = this;
 
-        let data = JSON.stringify({ text: input, SourceLanguageCode: src, TargetLanguageCode : dest });
+        let data = JSON.stringify({ text: input, SourceLanguageCode: src, TargetLanguageCode: dest });
 
-       // var data = "text=sample32323&email=a2g.com&token=12&SourceLanguageCode=en&TargetLanguageCode=es";
+        // var data = "text=sample32323&email=a2g.com&token=12&SourceLanguageCode=en&TargetLanguageCode=es";
 
 
         // let xhr = new XMLHttpRequest();
@@ -89,7 +89,7 @@ class Main extends Component {
         //         // that.setState({
         //         //     translatedResult : _temp.status.TranslatedText
         //         // });
-              
+
         //     }
         // });
 
@@ -99,25 +99,47 @@ class Main extends Component {
         // xhr.send(data);
 
 
-
+  fetch('https://19ru18sf56.execute-api.us-east-1.amazonaws.com/api/translateApp',
+            {  
+                method: 'post',
+             
+                mode: 'no-cors',
+                // headers:{
+                //     'Access-Control-Allow-Origin':'*',
+                //     'Content-Type': 'text/plain'
+                //     },
+                body:  (JSON.stringify({ text: input, SourceLanguageCode: src, TargetLanguageCode: dest })), //{ data : { text: input, SourceLanguageCode: src, TargetLanguageCode: dest }} ,
+            })
+            .then(function (response) {
+                console.log(response);
+                return response.json();
+            })
+            .then(function (data) {
+                console.log(data);
+                
+            })
+            .catch(function (error) {
+      
+                console.log('Request failed', error);
+            });
 
         // var data = "text=sample32323&email=a2g.com&token=12&SourceLanguageCode=en&TargetLanguageCode=es";
 
-var xhr2 = new XMLHttpRequest();
-xhr2.withCredentials = false;
+        // var xhr2 = new XMLHttpRequest();
+        // // xhr2.withCredentials = false;
 
-xhr2.addEventListener("readystatechange", function () {
-  if (this.readyState === 4) {
-    console.log(this.responseText);
-  }
-});
+        // xhr2.addEventListener("readystatechange", function () {
+        //     if (this.readyState === 4) {
+        //         console.log(this.responseText);
+        //     }
+        // });
 
-xhr2.open("POST", "https://19ru18sf56.execute-api.us-east-1.amazonaws.com/api/translateApp");
-xhr2.setRequestHeader("content-type", "application/json");
+        // xhr2.open("POST", "https://5ff6i38jik.execute-api.us-east-1.amazonaws.com/api/translateApp");
+        // xhr2.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        // xhr2.send(data);
 
-
-xhr2.send(data);
     }
+    
     play = (srcUrl) => {
         let x = document.getElementById("myAudio");
         document.getElementById("myAudio").setAttribute('src', srcUrl);
@@ -174,9 +196,9 @@ xhr2.send(data);
 
                 <h1>AWS Translate Demo</h1>
                 <div className="app">
-                <Translate submitMessage2={this.submitMessage2} />
+                    <Translate submitMessage2={this.submitMessage2} />
 
-                { this.state.translatedResult !== '' && <div>{this.state.translatedResult}</div>}
+                    {this.state.translatedResult !== '' && <div>{this.state.translatedResult}</div>}
                 </div>
             </div>
         );
