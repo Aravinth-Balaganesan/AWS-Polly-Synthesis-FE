@@ -17,29 +17,29 @@ class Main extends Component {
         const url = 'https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app';
         let that = this;
 
-        var data = JSON.stringify({ text: input, LanguageCode : lang});
+        let data = JSON.stringify({ text: input, LanguageCode: lang });
 
-var xhr = new XMLHttpRequest();
-xhr.withCredentials = false;
+        let xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
 
-xhr.addEventListener("readystatechange", function () {
-  if (this.readyState === 4) {
-    console.log(this.responseText);
-    var _temp = JSON.parse(this.responseText)
-    that.setState({
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                // console.log(this.responseText);
+                let _temp = JSON.parse(this.responseText);
+                let newAudio = new Audio(_temp.url);
+                newAudio.play();
+                that.setState({
                     recentSpeech: _temp.url,
                     responseList: [...that.state.responseList, { url: _temp.url, data: input }]
                 });
-               let newAudio =  new Audio(_temp.url);
-               newAudio.play();
-  }
-});
+              
+            }
+        });
 
-xhr.open("POST", "https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app");
-xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        xhr.open("POST", "https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app");
+        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
 
-xhr.send(data);
-
+        xhr.send(data);
 
         // axios(
         //     { url : url,
@@ -72,7 +72,7 @@ xhr.send(data);
     }
 
     playAudio = () => {
-        return this.state.responseList.length > 0 && <Player url={this.state.responseList[this.state.responseList.length - 1].url} play={true}/>
+        return this.state.responseList.length > 0 && <Player url={this.state.responseList[this.state.responseList.length - 1].url} play={true} />
     }
 
     render() {
@@ -81,11 +81,11 @@ xhr.send(data);
         }
         return (
             <div className="container">
-                
-                    {/* <span style={dispStyle}>
+
+                {/* <span style={dispStyle}>
                         {this.playAudio()}
                     </span> */}
-                
+
                 <h1>AWS Polly Synthesis Demo</h1>
                 {/* <p className="page-description">A tiny app that allows you to take notes by recording your voice</p>
         <p><a className="tz-link" href="htt`ps://tutorialzine.com/2017/08/converting-from-speech-to-text-with-javascript">Read the full article on Tutorialzine »</a></p>
@@ -113,7 +113,7 @@ xhr.send(data);
                         {this.state.responseList.map((rl, i) => {
                             return <tr key={i}>
                                 <td>{rl.data}</td>
-                                <td><a className="tz-link" href={rl.url}>Download</a><br></br><span><Player url={rl.url}play={false}/></span></td>
+                                <td><a className="tz-link" href={rl.url}>Download</a><br></br><span><Player url={rl.url} play={false} /></span></td>
                             </tr>
                         })}
                     </tbody>

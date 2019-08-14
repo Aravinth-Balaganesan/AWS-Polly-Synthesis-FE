@@ -4,7 +4,8 @@ class InputTemplate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: ''
+      input: '',
+      selectValue: "es-ES"
     }
   }
 
@@ -14,10 +15,14 @@ class InputTemplate extends Component {
     }
   }
 
-  submitMessage = (e, lang) => {
+  _handleDropdownChange = (e) => {
+    this.setState({ selectValue: e.target.value });
+  }
+
+  submitMessage = (e) => {
     e.preventDefault();
-    this.props.submitMessage(e, this.state.input, lang);
-    this.setState({ input: '' });
+    this.props.submitMessage(e, this.state.input, this.state.selectValue);
+    this.setState({ input: '', selectValue: "es-ES" });
   }
 
   onChange = (e) => {
@@ -41,10 +46,21 @@ class InputTemplate extends Component {
             placeholder="Enter text here...">
           </textarea>
         </div>
+
         <br></br>
         <div style={sty}>
-        <button className="buttons" onClick={e => this.submitMessage(e, 'es-ES')} type="button">Speak - Spanish, Mexican</button>
-        <button className="buttons" onClick={e => this.submitMessage(e, 'es-MX')} type="button">Speak - Spanish, Castilian</button>
+          {/* <button className="buttons" onClick={e => this.submitMessage(e, 'es-ES')} type="button">Speak - Spanish, Mexican</button>
+        <button className="buttons" onClick={e => this.submitMessage(e, 'es-MX')} type="button">Speak - Spanish, Castilian</button> */}
+          <select onChange={this._handleDropdownChange}>
+            <option value="es-ES">Spanish, Castilian</option>
+            <option value="es-MX">Spanish, Mexican</option>
+            <option value="en-GB">English, British</option>
+            <option value="en-IN">English, Indian</option>
+            <option value="fr-CA">French, Canadian</option>
+            <option value="de-DE">German</option>
+            <option value="hi-IN">Hindi</option>
+          </select>
+          <button className="buttons" onClick={e => this.submitMessage(e)} type="button">Speak</button>
         </div>
       </form >
     );
