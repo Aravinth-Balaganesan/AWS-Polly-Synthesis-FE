@@ -6,7 +6,33 @@ class InputTemplate extends Component {
     this.state = {
       input: '',
       selectValue: "es-US",
-      voice: 'Joanna'
+      voice: 'Penelope',
+      voiceList: [{
+        lang: 'es-US',
+        voices: ['Penelope', 'Miguel']
+      },
+      {
+        lang: 'es-ES',
+        voices: ['Lucia', 'Conchita', 'Enrique']
+      },
+      {
+        lang: 'es-MX',
+        voices: ['Mia']
+      },
+      {
+        lang: 'en-GB',
+        voices: ['Emma', 'Amy', 'Brian']
+      },
+      {
+        lang: 'en-IN',
+        voices: ['Raveena', 'Aditi']
+      },
+      {
+        lang: 'en-US',
+        voices: ['Salli', 'Kimberly', 'Kendra', 'Joanna', 'Ivy', 'Matthew', 'Justin', 'Joey']
+      }
+      ],
+      voices: ['Penelope', 'Miguel']
     }
   }
 
@@ -17,7 +43,8 @@ class InputTemplate extends Component {
   }
 
   _handleDropdownChange = (e) => {
-    this.setState({ selectValue: e.target.value });
+    let vic = this.state.voiceList.filter(s => s.lang === e.target.value)[0].voices;
+    this.setState({ selectValue: e.target.value, voices: vic, voice: vic[0] });
   }
 
   _handleDropdownChange2 = (e) => {
@@ -27,7 +54,7 @@ class InputTemplate extends Component {
   submitMessage = (e) => {
     e.preventDefault();
     this.props.submitMessage(e, this.state.input, this.state.selectValue, this.state.voice);
-    this.setState({ input: '', selectValue: "es-ES", voice: 'Joanna' });
+    this.setState({ input: '' });
   }
 
   onChange = (e) => {
@@ -45,7 +72,7 @@ class InputTemplate extends Component {
       alignSelf: 'center'
     }
     return (
-      <form>
+      <form onSubmit={e => this.submitMessage(e)} >
         <div className="input-single">
           <textarea rows="6"
             onKeyPress={this._handleKeyPress}
@@ -68,16 +95,20 @@ class InputTemplate extends Component {
             <option value="es-MX">Spanish, Mexican</option>
             <option value="en-GB">English, British</option>
             <option value="en-IN">English, Indian</option>
-            <option value="fr-CA">French, Canadian</option>
-            <option value="de-DE">German</option>
-            <option value="hi-IN">Hindi</option>
+            <option value="en-US">English, US</option>
+            {/* <option value="fr-CA">French, Canadian</option> */}
+            {/* <option value="de-DE">German</option>
+            <option value="hi-IN">Hindi</option> */}
           </select>
 
           <label style={selfAlignn}>
             <span>Select Voice:</span>
           </label>
           <select onChange={this._handleDropdownChange2}>
-            <option value="Joanna">Joanna</option>
+            {this.state.voices.map((op, kk) => {
+              return <option key={kk} value={op}>{op}</option>
+            })}
+            {/* <option value="Joanna">Joanna</option>
             <option value="Aditi">Aditi</option>
             <option value="Amy">Amy</option>
             <option value="Astrid">Astrid</option>
@@ -133,15 +164,11 @@ class InputTemplate extends Component {
             <option value="Vicki">Vicki</option>
 
 
-            <option value="ZhiyuAditi">ZhiyuAditi</option>
-
-
-
-
+            <option value="ZhiyuAditi">ZhiyuAditi</option> */}
 
           </select>
 
-          <button className="buttons" onClick={e => this.submitMessage(e)} type="button">Submit</button>
+          <button className="buttons" type="submit">Submit</button>
         </div>
       </form >
     );
