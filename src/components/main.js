@@ -11,14 +11,14 @@ class Main extends Component {
         this.state = { recentSpeech: '', responseList: [], translatedResult: '' };
     }
 
-    submitMessage = (e, input, lang) => {
+    submitMessage = (e, input, lang, voice) => {
         e.preventDefault();
         if (input === '') return;
         // console.log(input);
         const url = 'https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app';
         let that = this;
 
-        let data = JSON.stringify({ text: input, LanguageCode: lang });
+        let data = JSON.stringify({ text: input, LanguageCode: lang, voice : voice});
 
         let xhr = new XMLHttpRequest();
         xhr.withCredentials = false;
