@@ -30,7 +30,7 @@ class InputTemplate extends Component {
       {
         lang: 'en-US',
         voices: ['Salli', 'Kimberly', 'Kendra', 'Joanna', 'Ivy', 'Matthew', 'Justin', 'Joey'],
-        nurance : ['Allison', 
+        nurance: ['Allison',
           'Ava',
           'Carol',
           'Chloe',
@@ -51,7 +51,8 @@ class InputTemplate extends Component {
   }
 
   componentWillReceiveProps(props) {
-    this.setState({ voices: props.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Allison', 'Carol', 'Samantha', 'Tom'] })
+    let selected = props.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Allison', 'Carol', 'Samantha', 'Tom']
+    this.setState({ voices: selected, voice: selected[0] })
   }
 
   _handleKeyPress = (e) => {
@@ -93,8 +94,8 @@ class InputTemplate extends Component {
     const selfAlignn = {
       alignSelf: 'center'
     }
-    
-    
+
+
     return (
       <form onSubmit={e => this.submitMessage(e)} >
         <div className="input-single">
