@@ -6,7 +6,7 @@ class InputTemplate extends Component {
     this.state = {
       input: '',
       selectValue: "es-US",
-      voice: 'Penelope',
+      voice: props.API === 'AWS' ? 'Penelope' : 'Allison',
       voiceList: [{
         lang: 'es-US',
         voices: ['Penelope', 'Miguel']
@@ -29,11 +29,29 @@ class InputTemplate extends Component {
       },
       {
         lang: 'en-US',
-        voices: ['Salli', 'Kimberly', 'Kendra', 'Joanna', 'Ivy', 'Matthew', 'Justin', 'Joey']
+        voices: ['Salli', 'Kimberly', 'Kendra', 'Joanna', 'Ivy', 'Matthew', 'Justin', 'Joey'],
+        nurance : ['Allison', 
+          'Ava',
+          'Carol',
+          'Chloe',
+          'Ethan',
+          'Evan',
+          'Evelyn',
+          'Nathan',
+          'Nolan',
+          'Samantha',
+          'Susan',
+          'Tom',
+          'Zoe'
+        ]
       }
       ],
-      voices: ['Penelope', 'Miguel']
+      voices: props.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Allison', 'Carol', 'Samantha', 'Tom']
     }
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({ voices: props.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Allison', 'Carol', 'Samantha', 'Tom'] })
   }
 
   _handleKeyPress = (e) => {
@@ -43,7 +61,11 @@ class InputTemplate extends Component {
   }
 
   _handleDropdownChange = (e) => {
-    let vic = this.state.voiceList.filter(s => s.lang === e.target.value)[0].voices;
+    let vic = [];
+    if (this.props.API === 'AWS')
+      vic = this.state.voiceList.filter(s => s.lang === e.target.value)[0].voices;
+    else
+      vic = ['Allison', 'Carol', 'Samantha', 'Tom'];
     this.setState({ selectValue: e.target.value, voices: vic, voice: vic[0] });
   }
 
@@ -71,6 +93,8 @@ class InputTemplate extends Component {
     const selfAlignn = {
       alignSelf: 'center'
     }
+    
+    
     return (
       <form onSubmit={e => this.submitMessage(e)} >
         <div className="input-single">

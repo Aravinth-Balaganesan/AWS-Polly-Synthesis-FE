@@ -2,23 +2,27 @@ import React, { Component } from "react";
 import InputTemplate from './inputTemplate';
 import Player from './player';
 import "isomorphic-fetch";
-import Translate from "./translate";
+// import Translate from "./translate";
 // const axios = require('axios');
 
 class Main extends Component {
     constructor(props) {
         super(props);
-        this.state = { recentSpeech: '', responseList: [], translatedResult: '' };
+        this.state = { recentSpeech: '', responseList: [], translatedResult: '', API: 'nuanceAPI' };
     }
 
     submitMessage = (e, input, lang, voice) => {
         e.preventDefault();
         if (input === '') return;
         // console.log(input);
-        const url = 'https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app';
+        //const url = 'https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app';
         let that = this;
+        let payload = { text: input, LanguageCode: lang, voice: voice };
 
-        let data = JSON.stringify({ text: input, LanguageCode: lang, voice : voice});
+        if (this.state.API === 'nuanceAPI')
+            payload['type'] = 'nuanceAPI';
+
+        let data = JSON.stringify(payload);
 
         let xhr = new XMLHttpRequest();
         xhr.withCredentials = false;
@@ -67,48 +71,22 @@ class Main extends Component {
         //     });
     }
 
-
     submitMessage2 = (e, input, src, dest) => {
         e.preventDefault();
         if (input === '') return;
         // console.log(input);
         let that = this;
-
         let data = JSON.stringify({ text: input, SourceLanguageCode: src, TargetLanguageCode: dest });
 
-        // var data = "text=sample32323&email=a2g.com&token=12&SourceLanguageCode=en&TargetLanguageCode=es";
-
-
-        // let xhr = new XMLHttpRequest();
-        // xhr.withCredentials = false;
-
-        // xhr.addEventListener("readystatechange", function () {
-        //     if (this.readyState === 4) {
-        //         console.log(this.responseText);
-        //         //  let _temp = JSON.parse(this.responseText);
-        //         // that.setState({
-        //         //     translatedResult : _temp.status.TranslatedText
-        //         // });
-
-        //     }
-        // });
-
-        // xhr.open("POST", "https://19ru18sf56.execute-api.us-east-1.amazonaws.com/api/translateApp");
-        // xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-
-        // xhr.send(data);
-
-
-  fetch('https://19ru18sf56.execute-api.us-east-1.amazonaws.com/api/translateApp',
-            {  
+        fetch('https://19ru18sf56.execute-api.us-east-1.amazonaws.com/api/translateApp',
+            {
                 method: 'post',
-             
                 mode: 'no-cors',
                 // headers:{
                 //     'Access-Control-Allow-Origin':'*',
                 //     'Content-Type': 'text/plain'
                 //     },
-                body:  (JSON.stringify({ text: input, SourceLanguageCode: src, TargetLanguageCode: dest })), //{ data : { text: input, SourceLanguageCode: src, TargetLanguageCode: dest }} ,
+                body: (JSON.stringify({ text: input, SourceLanguageCode: src, TargetLanguageCode: dest })), //{ data : { text: input, SourceLanguageCode: src, TargetLanguageCode: dest }} ,
             })
             .then(function (response) {
                 console.log(response);
@@ -116,15 +94,14 @@ class Main extends Component {
             })
             .then(function (data) {
                 console.log(data);
-                
+
             })
             .catch(function (error) {
-      
+
                 console.log('Request failed', error);
             });
 
         // var data = "text=sample32323&email=a2g.com&token=12&SourceLanguageCode=en&TargetLanguageCode=es";
-
         // var xhr2 = new XMLHttpRequest();
         // // xhr2.withCredentials = false;
 
@@ -137,9 +114,15 @@ class Main extends Component {
         // xhr2.open("POST", "https://5ff6i38jik.execute-api.us-east-1.amazonaws.com/api/translateApp");
         // xhr2.setRequestHeader("content-type", "application/x-www-form-urlencoded");
         // xhr2.send(data);
-
     }
-    
+
+
+    _handleAPIChenage = (e) => {
+        this.setState({
+            API : e.target.value
+        });
+    }
+
     play = (srcUrl) => {
         let x = document.getElementById("myAudio");
         document.getElementById("myAudio").setAttribute('src', srcUrl);
@@ -153,6 +136,12 @@ class Main extends Component {
     render() {
         const dispStyle = {
             display: 'none'
+        };
+        const paddingStyle = {
+            margin: '20px'
+        };
+        const hstyle = {
+            height: '40px'
         }
         return (
             <div className="container">
@@ -161,21 +150,24 @@ class Main extends Component {
                         {this.playAudio()}
                     </span> */}
 
-                <h1>AWS Polly Synthesis Demo</h1>
+                <h1> { this.state.API === 'AWS' ? `AWS Polly Synthesis Demo` : `Nuance API Demo`}</h1>
                 {/* <p className="page-description">A tiny app that allows you to take notes by recording your voice</p>
         <p><a className="tz-link" href="htt`ps://tutorialzine.com/2017/08/converting-from-speech-to-text-with-javascript">Read the full article on Tutorialzine »</a></p>
         <h3 className="no-browser-support">Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This Demo In Google Chrome.</h3> */}
-                <div className="app">
-                    {/* <h3>Type here</h3> */}
-                    <InputTemplate submitMessage={this.submitMessage} />
-                    {/* <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p> */}
 
-                    {/* <h3>My Notes</h3>
-          <ul id="notes">
-            <li>
-              <p className="no-notes">You don't have any notes.</p>
-            </li>
-          </ul> */}
+                <div className="app">
+                    <div style={paddingStyle}>
+                        <label style={{ paddingRight: '50px' }}>
+                            <span>Select API:   </span>
+                        </label>
+                        <select style={hstyle} onChange={this._handleAPIChenage}  value={this.state.API}>
+                            <option value="AWS">AWS Polly</option>
+                            <option value="nuanceAPI">Nuance API</option>
+                        </select>
+                    </div>
+
+                    <InputTemplate API={this.state.API} submitMessage={this.submitMessage} />
+                    {/* <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p> */}
                 </div>
                 {this.state.responseList.length > 0 && <table>
                     <thead>
@@ -193,13 +185,6 @@ class Main extends Component {
                         })}
                     </tbody>
                 </table>}
-
-                {/* <h1>AWS Translate Demo</h1>
-                <div className="app">
-                    <Translate submitMessage2={this.submitMessage2} />
-
-                    {this.state.translatedResult !== '' && <div>{this.state.translatedResult}</div>}
-                </div> */}
             </div>
         );
     }
