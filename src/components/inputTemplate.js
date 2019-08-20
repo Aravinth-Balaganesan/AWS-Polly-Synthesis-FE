@@ -147,7 +147,7 @@ class InputTemplate extends Component {
           <select onChange={this._handleDropdownChange} value={this.state.selectValue}>
             {this.props.API === 'AWS' && <option value="es-US">Spanish, US</option>}
             {this.props.API !== 'AWS' && <option value="es_AR">Spanish Argentinian</option>}
-            {this.props.API !== 'AWS' && <option value="es_CL">Spanish Chilean (Not working)</option>}
+            {/* {this.props.API !== 'AWS' && <option value="es_CL">Spanish Chilean (Not working)</option>} */}
             {this.props.API !== 'AWS' && <option value="es_CO">Spanish Colombian</option>}
             <option value="es-ES">Spanish, Castilian</option>
             <option value="es-MX">Spanish, Mexican</option>
