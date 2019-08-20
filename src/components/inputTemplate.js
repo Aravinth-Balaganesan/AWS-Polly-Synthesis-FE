@@ -2,6 +2,75 @@ import React, { Component } from "react";
 
 const defaultNauranceAPI = ['Allison', 'Ava', 'Carol', 'Chloe', 'Ethan', 'Evan', 'Evelyn', 'Nathan', 'Nolan', 'Samantha', 'Susan', 'Tom', 'Zoe'];
 
+const awsPollyVoices = [{
+  lang: 'es-US',
+  voices: ['Penelope', 'Miguel']
+},
+{
+  lang: 'es-ES',
+  voices: ['Lucia', 'Conchita', 'Enrique']
+},
+{
+  lang: 'es-MX',
+  voices: ['Mia']
+},
+{
+  lang: 'en-GB',
+  voices: ['Emma', 'Amy', 'Brian']
+},
+{
+  lang: 'en-IN',
+  voices: ['Raveena', 'Aditi']
+},
+{
+  lang: 'en-US',
+  voices: ['Salli', 'Kimberly', 'Kendra', 'Joanna', 'Ivy', 'Matthew', 'Justin', 'Joey'],
+}
+]
+
+
+const nauranceAPIVoices = [
+  {
+    lang: 'es_AR',
+    voices: ['Diego']
+  },
+  {
+    lang: 'es_CL',
+    voices: ['Francisca']
+  },
+  {
+    lang: 'es_CO',
+    voices: ['Carlos', 'Soledad', 'Ximena']
+  },
+  {
+    lang: 'es-ES',
+    voices: [
+      'Jorge',
+      'Marisol',
+      'Monica'
+    ]
+  },
+  {
+    lang: 'es-MX',
+    voices: [
+      'Angelica',
+      'Javier',
+      'Juan',
+      'Paulina'
+    ]
+  },
+  {
+    lang: 'en-IN',
+    voices: ['Rishi',
+      'Sangeeta',
+      'Veena'
+    ]
+  },
+  {
+    lang: 'en-US',
+    voices: defaultNauranceAPI,
+  }]
+
 class InputTemplate extends Component {
   constructor(props) {
     super(props);
@@ -9,55 +78,16 @@ class InputTemplate extends Component {
       input: '',
       selectValue: "es-US",
       voice: props.API === 'AWS' ? 'Penelope' : 'Allison',
-      voiceList: [{
-        lang: 'es-US',
-        voices: ['Penelope', 'Miguel'],
-        nuranceVoices: defaultNauranceAPI
-      },
-      {
-        lang: 'es-ES',
-        voices: ['Lucia', 'Conchita', 'Enrique'],
-        nuranceVoices: [
-          'Jorge',
-          'Marisol',
-          'Monica'
-        ]
-      },
-      {
-        lang: 'es-MX',
-        voices: ['Mia'],
-        nuranceVoices: [
-          'Angelica',
-          'Javier',
-          'Juan',
-          'Paulina'
-        ]
-      },
-      // {
-      //   lang: 'en-GB',
-      //   voices: ['Emma', 'Amy', 'Brian']
-      // },
-      {
-        lang: 'en-IN',
-        voices: ['Raveena', 'Aditi'],
-        nuranceVoices: ['Rishi',
-          'Sangeeta',
-          'Veena'
-        ]
-      },
-      {
-        lang: 'en-US',
-        voices: ['Salli', 'Kimberly', 'Kendra', 'Joanna', 'Ivy', 'Matthew', 'Justin', 'Joey'],
-        nuranceVoices: defaultNauranceAPI
-      }
-      ],
-      voices: props.API === 'AWS' ? ['Penelope', 'Miguel'] : defaultNauranceAPI
+      voiceList: props.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices,
+      voices: props.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Diego']
     }
   }
 
-  componentWillReceiveProps(props) {
-    let selected = props.API === 'AWS' ? ['Penelope', 'Miguel'] : defaultNauranceAPI;
-    this.setState({ voices: selected, voice: selected[0] });
+  componentWillReceiveProps(newProps) {
+    if (newProps.API != this.props.API) {
+      let selected = this.props.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Diego'];
+      this.setState({ voiceList: this.props.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices, voices: selected, voice: selected[0] });
+    }
   }
 
   _handleKeyPress = (e) => {
@@ -68,10 +98,7 @@ class InputTemplate extends Component {
 
   _handleDropdownChange = (e) => {
     let vic = [];
-    if (this.props.API === 'AWS')
-      vic = this.state.voiceList.filter(s => s.lang === e.target.value)[0].voices;
-    else
-      vic = this.state.voiceList.filter(s => s.lang === e.target.value)[0].nuranceVoices;
+    vic = this.state.voiceList.filter(s => s.lang === e.target.value)[0].voices;
     this.setState({ selectValue: e.target.value, voices: vic, voice: vic[0] });
   }
 
@@ -117,10 +144,12 @@ class InputTemplate extends Component {
             <span>Select Language:</span>
           </label>
           <select onChange={this._handleDropdownChange}>
-            <option value="es-US">Spanish, US</option>
+            {this.props.API === 'AWS' && <option value="es-US">Spanish, US</option>}
+            {this.props.API !== 'AWS' && <option value="es_AR">Spanish Argentinian</option>}
+            {this.props.API !== 'AWS' && <option value="es_CL">Spanish Chilean (Not working)</option>}
+            {this.props.API !== 'AWS' && <option value="es_CO">Spanish Colombian</option>}
             <option value="es-ES">Spanish, Castilian</option>
             <option value="es-MX">Spanish, Mexican</option>
-            {/* <option value="en-GB">English, British</option> */}
             <option value="en-IN">English, Indian</option>
             <option value="en-US">English, US</option>
           </select>
