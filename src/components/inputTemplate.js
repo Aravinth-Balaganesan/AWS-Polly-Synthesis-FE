@@ -87,7 +87,7 @@ class InputTemplate extends Component {
     if (newProps.API !== this.props.API) {
       // console.log(newProps.API , '===' , this.props.API)
       let selected = newProps.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Diego'];
-      this.setState({ voiceList: newProps.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices, voices: selected, voice: selected[0], selectValue : awsPollyVoices[0].lang });
+      this.setState({ voiceList: newProps.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices, voices: selected, voice: selected[0], selectValue : newProps.API === 'AWS' ? awsPollyVoices[0].lang : nauranceAPIVoices[0].lang  });
     }
   }
 
