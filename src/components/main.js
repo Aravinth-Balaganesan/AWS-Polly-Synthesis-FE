@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import InputTemplate from './inputTemplate';
 import Player from './player';
 import "isomorphic-fetch";
-// import Translate from "./translate";
-// const axios = require('axios');
 
 class Main extends Component {
     constructor(props) {
@@ -15,7 +13,6 @@ class Main extends Component {
         e.preventDefault();
         if (input === '') return;
         // console.log(input);
-        //const url = 'https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app';
         let that = this;
         let payload = { text: input, LanguageCode: lang, voice: voice };
 
@@ -29,15 +26,14 @@ class Main extends Component {
 
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                // console.log(this.responseText);
                 let _temp = JSON.parse(this.responseText);
                 let newAudio = new Audio(_temp.url);
                 newAudio.play();
+                let _api = that.state.API === 'AWS' ? 'AWS Polly' : 'Nuance API';
                 that.setState({
                     recentSpeech: _temp.url,
-                    responseList: [...that.state.responseList, { url: _temp.url, data: input }]
+                    responseList: [...that.state.responseList, { url: _temp.url, data: input, API: _api }]
                 });
-
             }
         });
 
@@ -74,9 +70,8 @@ class Main extends Component {
     submitMessage2 = (e, input, src, dest) => {
         e.preventDefault();
         if (input === '') return;
-        // console.log(input);
-        let that = this;
-        let data = JSON.stringify({ text: input, SourceLanguageCode: src, TargetLanguageCode: dest });
+        // let that = this;
+        // let data = JSON.stringify({ text: input, SourceLanguageCode: src, TargetLanguageCode: dest });
 
         fetch('https://19ru18sf56.execute-api.us-east-1.amazonaws.com/api/translateApp',
             {
@@ -119,7 +114,7 @@ class Main extends Component {
 
     _handleAPIChenage = (e) => {
         this.setState({
-            API : e.target.value
+            API: e.target.value
         });
     }
 
@@ -134,9 +129,6 @@ class Main extends Component {
     }
 
     render() {
-        const dispStyle = {
-            display: 'none'
-        };
         const paddingStyle = {
             margin: '20px'
         };
@@ -145,33 +137,23 @@ class Main extends Component {
         }
         return (
             <div className="container">
-
-                {/* <span style={dispStyle}>
-                        {this.playAudio()}
-                    </span> */}
-
-                <h1> { this.state.API === 'AWS' ? `AWS Polly Synthesis Demo` : `Nuance API Demo`}</h1>
-                {/* <p className="page-description">A tiny app that allows you to take notes by recording your voice</p>
-        <p><a className="tz-link" href="htt`ps://tutorialzine.com/2017/08/converting-from-speech-to-text-with-javascript">Read the full article on Tutorialzine »</a></p>
-        <h3 className="no-browser-support">Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This Demo In Google Chrome.</h3> */}
-
+                <h1> {this.state.API === 'AWS' ? `AWS Polly Synthesis Demo` : `Nuance API Demo`}</h1>
                 <div className="app">
                     <div style={paddingStyle}>
                         <label style={{ paddingRight: '50px' }}>
                             <span>Select API:   </span>
                         </label>
-                        <select style={hstyle} onChange={this._handleAPIChenage}  value={this.state.API}>
+                        <select style={hstyle} onChange={this._handleAPIChenage} value={this.state.API}>
                             <option value="AWS">AWS Polly</option>
                             <option value="nuanceAPI">Nuance API</option>
                         </select>
                     </div>
-
                     <InputTemplate API={this.state.API} submitMessage={this.submitMessage} />
-                    {/* <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p> */}
                 </div>
                 {this.state.responseList.length > 0 && <table>
                     <thead>
                         <tr>
+                            <th>API</th>
                             <th>Text</th>
                             <th>Action</th>
                         </tr>
@@ -179,6 +161,7 @@ class Main extends Component {
                     <tbody>
                         {this.state.responseList.map((rl, i) => {
                             return <tr key={i}>
+                                <td>{rl.API}</td>
                                 <td>{rl.data}</td>
                                 <td><a className="tz-link" href={rl.url}>Download</a><br></br><span><Player url={rl.url} play={false} /></span></td>
                             </tr>
