@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 
-const defaultNauranceAPI = ['Allison', 'Ava', 'Carol', 'Chloe', 'Ethan', 'Evan', 'Evelyn', 'Nathan', 'Nolan', 'Samantha', 'Susan', 'Tom', 'Zoe'];
+const defaultNauranceAPI = ['Allison', 'Ava', 'Carol',
+  // 'Chloe', 
+  // 'Ethan',
+  //  'Evan', 
+  //  'Evelyn', 
+  //  'Nathan',
+  // 'Nolan', 
+  'Samantha', 'Susan', 'Tom',
+  // 'Zoe'
+];
 
 const awsPollyVoices = [{
   lang: 'es-US',
@@ -40,13 +49,13 @@ const nauranceAPIVoices = [
   },
   {
     lang: 'es_CO',
-    voices: ['Carlos', 'Soledad', 'Ximena']
+    voices: ['Carlos', 'Soledad'] // Ximena
   },
   {
     lang: 'es-ES',
     voices: [
       'Jorge',
-      'Marisol',
+      //'Marisol',
       'Monica'
     ]
   },
@@ -61,7 +70,8 @@ const nauranceAPIVoices = [
   },
   {
     lang: 'en-IN',
-    voices: ['Rishi',
+    voices: [
+      //'Rishi',
       'Sangeeta',
       'Veena'
     ]
@@ -87,7 +97,7 @@ class InputTemplate extends Component {
     if (newProps.API !== this.props.API) {
       // console.log(newProps.API , '===' , this.props.API)
       let selected = newProps.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Diego'];
-      this.setState({ voiceList: newProps.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices, voices: selected, voice: selected[0], selectValue : newProps.API === 'AWS' ? awsPollyVoices[0].lang : nauranceAPIVoices[0].lang  });
+      this.setState({ voiceList: newProps.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices, voices: selected, voice: selected[0], selectValue: newProps.API === 'AWS' ? awsPollyVoices[0].lang : nauranceAPIVoices[0].lang });
     }
   }
 
@@ -110,13 +120,17 @@ class InputTemplate extends Component {
   submitMessage = (e) => {
     e.preventDefault();
     this.props.submitMessage(e, this.state.input, this.state.selectValue, this.state.voice);
-    this.setState({ input: '' });
+    // this.setState({ input: '' });
   }
 
   onChange = (e) => {
     e.preventDefault();
     const input = e.target.value;
     this.setState({ input });
+  }
+
+  reset = () => {
+    this.setState({ input: '' });
   }
 
   render() {
@@ -164,6 +178,7 @@ class InputTemplate extends Component {
             })}
           </select>
           <button className="buttons" type="submit">Submit</button>
+          <button className="buttons-reset" type="button" onClick={this.reset}>Reset</button>
         </div>
       </form>
     );

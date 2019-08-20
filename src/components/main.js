@@ -29,7 +29,7 @@ class Main extends Component {
                 let _temp = JSON.parse(this.responseText);
                 let newAudio = new Audio(_temp.url);
                 newAudio.play();
-                let _api = that.state.API === 'AWS' ? 'AWS Polly' : 'Nuance API';
+                let _api = that.state.API === 'AWS' ? 'AWS Polly' : 'Nuance';
                 that.setState({
                     recentSpeech: _temp.url,
                     responseList: [...that.state.responseList, { url: _temp.url, data: input, API: _api }]
@@ -136,7 +136,7 @@ class Main extends Component {
             height: '40px'
         }
         return (
-            <div className="container">
+            <div className="container" style={{ marginTop : '-50px'}}>
                 <h1> {this.state.API === 'AWS' ? `AWS Polly Synthesis Demo` : `Nuance API Demo`}</h1>
                 <div className="app">
                     <div style={paddingStyle}>
@@ -145,7 +145,7 @@ class Main extends Component {
                         </label>
                         <select style={hstyle} onChange={this._handleAPIChenage} value={this.state.API}>
                             <option value="AWS">AWS Polly</option>
-                            <option value="nuanceAPI">Nuance API</option>
+                            <option value="nuanceAPI">Nuance</option>
                         </select>
                     </div>
                     <InputTemplate API={this.state.API} submitMessage={this.submitMessage} />
