@@ -84,9 +84,10 @@ class InputTemplate extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.API != this.props.API) {
-      let selected = this.props.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Diego'];
-      this.setState({ voiceList: this.props.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices, voices: selected, voice: selected[0] });
+    if (newProps.API !== this.props.API) {
+      // console.log(newProps.API , '===' , this.props.API)
+      let selected = newProps.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Diego'];
+      this.setState({ voiceList: newProps.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices, voices: selected, voice: selected[0], selectValue : awsPollyVoices[0].lang });
     }
   }
 
@@ -143,7 +144,7 @@ class InputTemplate extends Component {
           <label style={selfAlignn}>
             <span>Select Language:</span>
           </label>
-          <select onChange={this._handleDropdownChange}>
+          <select onChange={this._handleDropdownChange} value={this.state.selectValue}>
             {this.props.API === 'AWS' && <option value="es-US">Spanish, US</option>}
             {this.props.API !== 'AWS' && <option value="es_AR">Spanish Argentinian</option>}
             {this.props.API !== 'AWS' && <option value="es_CL">Spanish Chilean (Not working)</option>}
