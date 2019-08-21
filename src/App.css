@@ -159,6 +159,7 @@ table {
     margin: 0 auto;
     /* padding: 100px 50px; */
     text-align: center;
+    padding-bottom: 100px;
 }
 
 audio::-webkit-media-controls-mute-button {
@@ -167,4 +168,10 @@ audio::-webkit-media-controls-mute-button {
 
 audio::-webkit-media-controls-volume-slider {
   display: none !important;
+}
+
+.alert {
+  padding: 10px;
+  color: #c7443a;
+  /* color: white; */
 }

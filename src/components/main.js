@@ -168,7 +168,7 @@ class Main extends Component {
             <div>
                 {this.state.loading && <div className="loader"></div>}
                 <div className="container">
-                    <h1> {this.state.API === 'AWS' ? `AWS Polly Synthesis Demo` : (this.state.API === 'nuanceAPI' ? `Nuance API Demo` : 'Google API Demo')}</h1>
+                    <h1> {this.state.API === 'AWS' ? `AWS Polly Synthesis Demo` : (this.state.API === 'nuanceAPI' ? `Nuance API Synthesis Demo` : 'Google API Synthesis Demo')}</h1>
                     <div className="app">
                         <div style={paddingStyle}>
                             <label style={{ paddingRight: '50px' }}>

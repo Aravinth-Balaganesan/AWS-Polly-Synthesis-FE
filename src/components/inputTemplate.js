@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import  GenderData from './gender';
+import GenderData from './gender';
 const vs = GenderData;
 
 const defaultNauranceAPI = ['Allison', 'Ava',
@@ -171,9 +171,14 @@ class InputTemplate extends Component {
             onKeyPress={this._handleKeyPress}
             onChange={this.onChange}
             value={this.state.input}
-            placeholder="Enter text here...">
+            placeholder={ this.props.API !== 'AWS' ? 'Enter text here and text is limited upto 2000 characters only' : "Enter text here..."}>
           </textarea>
         </div>
+        {(this.state.input.length > 2000 && this.props.API !== 'AWS') && <div>
+          <div className="alert">
+            <strong>Character count limit exceeded!</strong> You have reached the limit. Please input 2000 characters.
+          </div>
+        </div>}
 
         <br></br>
         <div style={sty}>
@@ -201,7 +206,7 @@ class InputTemplate extends Component {
               return <option key={kk} value={op}>{op} {vs.filter(v => v.name === op).length > 0 && " (" + vs.filter(v => v.name === op)[0].gender + ')'}</option>
             })}
           </select>
-          <button className="buttons" type="submit">Submit</button>
+          <button className={(this.state.input === '' || (this.state.input.length > 2000 && this.props.API !== 'AWS')) ? 'buttons-reset' : "buttons"} type="submit" disabled={this.state.input === '' ? true : false}>Submit</button>
           <button className="buttons-reset" type="button" onClick={this.reset}>Reset</button>
         </div>
       </form>
