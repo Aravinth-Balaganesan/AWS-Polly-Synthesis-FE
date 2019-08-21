@@ -48,8 +48,15 @@ class Main extends Component {
                     if (audios.length - 1 === i)
                         audios[i].play();
                 }
-            }
+            } 
         });
+
+        xhr.onerror = function () {
+            console.log("** An error occurred during the transaction");
+            that.setState({
+                loading: false
+            });
+        };
 
         xhr.open("POST", "https://0dgsxb4p16.execute-api.us-east-1.amazonaws.com/default/aravinth-polly-app");
         xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
