@@ -184,7 +184,7 @@ class InputTemplate extends Component {
             {this.props.API === 'AWS' && <option value="es-US">Spanish, US</option>}
             {this.props.API === 'nuanceAPI' && <option value="es_AR">Spanish Argentinian</option>}
             {this.props.API === 'nuanceAPI' && <option value="es_CO">Spanish Colombian</option>}
-            {(this.props.API === 'nuanceAPI' || this.props.API === 'nuanceAPI') &&
+            {(this.props.API === 'nuanceAPI' || this.props.API === 'AWS') &&
               <React.Fragment> <option value="es-ES">Spanish, Castilian</option><option value="es-MX">Spanish, Mexican</option><option value="en-IN">English, Indian</option><option value="en-US">English, US</option> </React.Fragment>}
             {this.props.API === 'gcloudAPI' &&
               <React.Fragment>
@@ -196,7 +196,7 @@ class InputTemplate extends Component {
           <label style={selfAlignn}>
             <span>Select Voice:</span>
           </label>
-          <select onChange={this._handleDropdownChange2}>
+          <select onChange={this._handleDropdownChange2} value={this.state.voice}>
             {this.state.voices.map((op, kk) => {
               return <option key={kk} value={op}>{op} {vs.filter(v => v.name === op).length > 0 && " (" + vs.filter(v => v.name === op)[0].gender + ')'}</option>
             })}
