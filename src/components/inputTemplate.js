@@ -1,187 +1,9 @@
 import React, { Component } from "react";
+import  GenderData from './gender';
+const vs = GenderData;
 
-const vs = [
-  {
-    name : 'Allison',
-    gender : 'F'
-  },
-  {
-    name : 'Ava',
-    gender : 'F'
-  },
-  {
-    name : 'Chloe',
-    gender : 'F'
-  },
-  {
-    name : 'Ethan',
-    gender : 'M'
-  },
-  {
-    name : 'Evan',
-    gender : 'M'
-  },
-  {
-    name : 'Evelyn',
-    gender : 'F'
-  },
-  {
-    name : 'Nathan',
-    gender : 'M'
-  },
-  {
-    name : 'Nolan',
-    gender : 'M'
-  },
-  {
-    name : 'Samantha',
-    gender : 'F'
-  },
-  {
-    name : 'Susan',
-    gender : 'F'
-  },
-
-  {
-    name : 'Tom',
-    gender : 'M'
-  },
-  {
-    name : 'Zoe',
-    gender : 'F'
-  },
-  {
-    name : 'Jorge',
-    gender : 'M'
-  },
-  {
-    name : 'Marisol',
-    gender : 'F'
-  },
-
-   {
-    name : 'Monica',
-    gender : 'F'
-  },
-
-  {
-    name : 'Carlos',
-    gender : 'M'
-  },
-  {
-    name : 'Soledad',
-    gender : 'F'
-  },
-  {
-    name : 'Ximena',
-    gender : 'F'
-  },
-  {
-    name : 'Angelica',
-    gender : 'F'
-  },
-
-   {
-    name : 'Javier',
-    gender : 'M'
-  },
-   {
-    name : 'Juan',
-    gender : 'M'
-  },
-  {
-    name : 'Paulina',
-    gender : 'F'
-  },
-  {
-    name : 'Tessa',
-    gender : 'F'
-  },
-  {
-    name : 'Diego',
-    gender : 'M'
-  },
-  {
-    name : 'Sangeeta',
-    gender : 'F'
-  },
-  {
-    name : 'Veena',
-    gender : 'F'
-  },
-
-  // AWS 
-  {
-    name : 'Salli',
-    gender : 'F'
-  },
-  {
-    name : 'Joanna',
-    gender : 'F'
-  },
-  {
-    name : 'Ivy',
-    gender : 'F'
-  },
-  {
-    name : 'Kendra',
-    gender : 'F'
-  },
-  {
-    name : 'Kimberly',
-    gender : 'F'
-  },
-  {
-    name : 'Matthew',
-    gender : 'M'
-  },
-  {
-    name : 'Justin',
-    gender : 'M'
-  },
-  {
-    name : 'Joey',
-    gender : 'M'
-  },
-  {
-    name : 'Lucia',
-    gender : 'F'
-  },
-  {
-    name : 'Conchita',
-    gender : 'F'
-  },
-  {
-    name : 'Enrique',
-    gender : 'M'
-  },
-  {
-    name : 'Mia',
-    gender : 'F'
-  },
-
-  {
-    name : 'Penelope',
-    gender : 'F'
-  },
-  {
-    name : 'Miguel',
-    gender : 'M'
-  },
-  {
-    name : 'Raveena',
-    gender : 'F'
-  },
-
-  {
-    name : 'Aditi',
-    gender : 'F'
-  }
-];
-
-
-const defaultNauranceAPI = ['Allison', 'Ava', 
-// 'Carol',
+const defaultNauranceAPI = ['Allison', 'Ava',
+  // 'Carol',
   // 'Chloe', 
   // 'Ethan',
   //  'Evan', 
@@ -216,8 +38,7 @@ const awsPollyVoices = [{
   lang: 'en-US',
   voices: ['Salli', 'Kimberly', 'Kendra', 'Joanna', 'Ivy', 'Matthew', 'Justin', 'Joey'],
 }
-]
-
+];
 
 const nauranceAPIVoices = [
   {
@@ -260,7 +81,25 @@ const nauranceAPIVoices = [
   {
     lang: 'en-US',
     voices: defaultNauranceAPI,
-  }]
+  }];
+
+const gcloudVoices = [
+  {
+    lang: 'es-ES',
+    voices: [
+      'es-ES-Standard-A'
+    ]
+  },
+  {
+    lang: 'en-US',
+    voices: [
+      'en-US-Standard-B',
+      'en-US-Standard-C',
+      'en-US-Standard-D',
+      'en-US-Standard-E'
+    ]
+  }
+];
 
 class InputTemplate extends Component {
   constructor(props) {
@@ -268,17 +107,16 @@ class InputTemplate extends Component {
     this.state = {
       input: '',
       selectValue: "es-US",
-      voice: props.API === 'AWS' ? 'Penelope' : 'Allison',
-      voiceList: props.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices,
-      voices: props.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Diego']
+      voice: props.API === 'AWS' ? 'Penelope' : (props.API === 'nuanceAPI' ? 'Diego' : 'es-ES-Standard-A'),
+      voiceList: props.API === 'AWS' ? awsPollyVoices : (props.API === 'nuanceAPI' ? nauranceAPIVoices : gcloudVoices),
+      voices: props.API === 'AWS' ? ['Penelope', 'Miguel'] : (props.API === 'nuanceAPI' ? ['Diego'] : ['es-ES-Standard-A'])
     }
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.API !== this.props.API) {
-      // console.log(newProps.API , '===' , this.props.API)
-      let selected = newProps.API === 'AWS' ? ['Penelope', 'Miguel'] : ['Diego'];
-      this.setState({ voiceList: newProps.API === 'AWS' ? awsPollyVoices : nauranceAPIVoices, voices: selected, voice: selected[0], selectValue: newProps.API === 'AWS' ? awsPollyVoices[0].lang : nauranceAPIVoices[0].lang });
+      let selected = newProps.API === 'AWS' ? ['Penelope', 'Miguel'] : (newProps.API === 'nuanceAPI' ? ['Diego'] : ['es-ES-Standard-A']);
+      this.setState({ voiceList: newProps.API === 'AWS' ? awsPollyVoices : (newProps.API === 'nuanceAPI' ? nauranceAPIVoices : gcloudVoices), voices: selected, voice: selected[0], selectValue: newProps.API === 'AWS' ? awsPollyVoices[0].lang : (newProps.API === 'nuanceAPI' ? nauranceAPIVoices[0].lang : gcloudVoices[0].lang) });
     }
   }
 
@@ -290,7 +128,10 @@ class InputTemplate extends Component {
 
   _handleDropdownChange = (e) => {
     let vic = [];
-    vic = this.state.voiceList.filter(s => s.lang === e.target.value)[0].voices;
+    // console.log(e.target.value);
+    let filteredData = this.state.voiceList.filter(s => s.lang === e.target.value);
+    if (filteredData.length > 0)
+      vic = filteredData[0].voices;
     this.setState({ selectValue: e.target.value, voices: vic, voice: vic[0] });
   }
 
@@ -341,13 +182,15 @@ class InputTemplate extends Component {
           </label>
           <select onChange={this._handleDropdownChange} value={this.state.selectValue}>
             {this.props.API === 'AWS' && <option value="es-US">Spanish, US</option>}
-            {this.props.API !== 'AWS' && <option value="es_AR">Spanish Argentinian</option>}
-            {/* {this.props.API !== 'AWS' && <option value="es_CL">Spanish Chilean (Not working)</option>} */}
-            {this.props.API !== 'AWS' && <option value="es_CO">Spanish Colombian</option>}
-            <option value="es-ES">Spanish, Castilian</option>
-            <option value="es-MX">Spanish, Mexican</option>
-            <option value="en-IN">English, Indian</option>
-            <option value="en-US">English, US</option>
+            {this.props.API === 'nuanceAPI' && <option value="es_AR">Spanish Argentinian</option>}
+            {this.props.API === 'nuanceAPI' && <option value="es_CO">Spanish Colombian</option>}
+            {(this.props.API === 'nuanceAPI' || this.props.API === 'nuanceAPI') &&
+              <React.Fragment> <option value="es-ES">Spanish, Castilian</option><option value="es-MX">Spanish, Mexican</option><option value="en-IN">English, Indian</option><option value="en-US">English, US</option> </React.Fragment>}
+            {this.props.API === 'gcloudAPI' &&
+              <React.Fragment>
+                <option value="es-ES">Spanish (Spain)</option>
+                <option value="en-US">English (US)</option>
+              </React.Fragment>}
           </select>
 
           <label style={selfAlignn}>
@@ -355,7 +198,7 @@ class InputTemplate extends Component {
           </label>
           <select onChange={this._handleDropdownChange2}>
             {this.state.voices.map((op, kk) => {
-              return <option key={kk} value={op}>{op} {vs.filter(v=> v.name === op).length > 0 && " (" + vs.filter(v=> v.name === op)[0].gender + ')'}</option>
+              return <option key={kk} value={op}>{op} {vs.filter(v => v.name === op).length > 0 && " (" + vs.filter(v => v.name === op)[0].gender + ')'}</option>
             })}
           </select>
           <button className="buttons" type="submit">Submit</button>
